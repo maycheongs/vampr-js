@@ -37,37 +37,42 @@ class Vampire {
 
   /** Tree traversal methods **/
 
-  // Returns the vampire object with that name, or null if no vampire exists with that name
+  // Returns the vampire descendant object with that name, or null if no vampire exists with that name
   vampireWithName(name) {
-    
+    if (this.name === name){
+      return this;
+    }
+    for (const offspring of this.offspring) {
+      let vampire = offspring.vampireWithName(name)
+      if (vampire) {
+        return vampire;
+      } 
+    }
+    return null;
   }
 
   // Returns the total number of vampires that exist
   get totalDescendents() {
-    
+    let total = 0;
+    for (const offspring of this.offspring) {
+      total++;
+      total += offspring.totalDescendents
+    }    
+    return total;
   }
 
   // Returns an array of all the vampires that were converted after 1980
   get allMillennialVampires() {
-    
-  }
+    let array = [];
+    for (const offspring of this.offspring) {
+      if (offspring.yearConverted > 1980) {
+        array.push(offspring);       
+      }
+      array = array.concat(offspring.allMillennialVampires);
+    }
 
-  /** Tree traversal methods **/
-
-  // Returns the vampire object with that name, or null if no vampire exists with that name
-  vampireWithName(name) {
-    
-  }
-
-  // Returns the total number of vampires that exist
-  get totalDescendents() {
-    
-  }
-
-  // Returns an array of all the vampires that were converted after 1980
-  get allMillennialVampires() {
-    
-  }
+    return array;   
+  }  
 
   /** Stretch **/
 
@@ -89,6 +94,7 @@ class Vampire {
     return compareThis;
   }
 }
+
 
 module.exports = Vampire;
 
